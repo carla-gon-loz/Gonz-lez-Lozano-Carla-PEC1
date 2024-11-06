@@ -1,0 +1,209 @@
+---
+title: "Informe"
+author: "Carla Gonzalez"
+date: "2024-11-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Resumen ejecutivo
+
+Este estudio aborda el procesamiento y análisis de datos basados en el artículo titulado "Metabotypes of response to bariatric surgery independent of the magnitude of weight loss" y enfocado en explorar respuestas metabólicas tras la cirugía bariátrica, más allá de la pérdida de peso. El objetivo principal fue crear un objeto de tipo SummarizedExperiment que permitiera una manipulación eficiente y análisis profundo de los datos, utilizando herramientas bioinformáticas avanzadas para evaluar los metabótipos en función de sus respuestas individuales a la intervención quirúrgica. El proceso comenzó con la selección y descarga del conjunto de datos, y su transformación para adaptarlo a la estructura del SummarizedExperiment. Esta implementación integró tanto las mediciones metabólicas como los metadatos, facilitando la evaluación de patrones y asociaciones entre metabolitos y la respuesta quirúrgica. Los principales hallazgos revelaron que, aunque la pérdida de peso es una respuesta esperada, existen perfiles metabólicos distintos que responden de manera diferencial a la cirugía bariátrica. Estos metabolitos identificados fueron independientes del grado de pérdida de peso, sugiriendo que existen factores metabólicos y biológicos específicos que podrían predecir la eficacia de la intervención quirúrgica en términos de mejora metabólica.
+
+Este estudio proporciona una base para futuras investigaciones que busquen personalizar tratamientos de cirugía bariátrica y optimizar resultados clínicos a través de un enfoque metabólico específico
+
+## 2. Objetivos del estudio
+
+El objetivo principal de este trabajo es seleccionar, analizar y organizar un conjunto de datos de metabolómica empleando herramientas bioinformáticas especializadas, con el fin de crear una estructura de datos eficiente y realizar una exploración inicial que permita obtener una visión general de los datos. Los objetivos específicos que se tienen que alcanzar son: Seleccionar un dataset de metabolómica, utilizando un conjunto de datos disponibles en el repositorio MetaboData Crear un contenedor del tipo SummarizedExperiment Explorar el dataset seleccionado, para obtener una visión general de su estructura y principales características. Elaborar un informe y repositorio en GitHub.
+
+## 3. Materiales y métodos
+
+Este estudio se basa en un conjunto de datos utilizado en el artículo titulado "Metabotypes of response to bariatric surgery independent of the magnitude of weight loss" (Metabotipos de respuesta a la cirugía bariátrica independiente de la magnitud de la pérdida de peso). Este conjunto de datos, disponible tanto en el sitio web del artículo como en un repositorio independiente en GitHub, respalda los hallazgos del estudio y facilita su reutilización en otros análisis. El conjunto de datos consta de los siguientes archivos:
+
+*DataInfo_S013.csv*: Este archivo contiene los metadatos asociados al archivo de datos principales (DataValues_S013.csv), incluyendo información explicativa sobre cada variable medida, unidades de medida y descripciones de las columnas de datos.
+
+*DataValues_S013.csv*: El archivo principal de datos que contiene valores clínicos y metabolómicos de 39 pacientes, cada uno medido en cinco momentos diferentes, antes y después de la cirugía bariátrica. Este archivo incluye tanto las mediciones clínicas como los datos metabolómicos.
+
+*AAInformation_S006.csv*: Archivo que proporciona información adicional sobre los metabolitos presentes en DataValues_S013.csv, incluyendo detalles como la identificación de metabolitos, nombres comunes y clasificaciones bioquímicas.
+
+Estos archivos ofrecen un conjunto de datos exhaustivo que permite analizar cómo los perfiles metabólicos de los pacientes responden a la cirugía bariátrica, independientemente de la magnitud de la pérdida de peso. Para realizar este análisis no se ha utilizado el archivo AAInformation_S006.CSV en el SummarizedExperiment más que de forma informativa para conocer la información que nos daba el conjunto de metadatos DataInfo_S013.csv
+
+**Herramientas Informáticas y Bioinformáticas**
+
+Se utilizaron herramientas y paquetes bioinformáticos en el entorno de R para procesar y analizar los datos, especialmente:
+
+SummarizedExperiment (Bioconductor): para crear un contenedor que organizara y facilitara el análisis de los datos metabolómicos junto con los metadatos.
+
+ggplot2: para visualización de resultados.
+
+BiocManager: para gestionar la instalación de paquetes de Bioconductor.
+
+Además, se utilizó GitHub como repositorio, para documentar y gestionar el trabajo, asegurando la reproducibilidad y accesibilidad del código y resultados.
+
+**Procedimiento General de Análisis**
+
+1.  **Descarga y Preprocesamiento de los Datos**: Los archivos de datos y metadatos fueron descargados directamente desde el respositorio metaboData y examinados para asegurar su integridad. Los datos fueron limpiados y normalizados, eliminando valores faltantes y ajustando la escala de los datos metabolómicos.
+
+2.  **Creación del Contenedor SummarizedExperiment**: Los datos clínicos y metabolómicos, junto con los metadatos correspondientes, se organizaron en un contenedor de tipo **SummarizedExperiment**. Esta estructura permitió integrar las mediciones metabolómicas y los metadatos descriptivos en una única estructura, optimizando la gestión y el análisis de los datos.
+
+3.  **Exploración Descriptiva del Dataset**: Se llevó a cabo una exploración inicial para obtener una visión general de la distribución y variabilidad de los datos. 
+
+4.  **Interpretación de Resultados**: Los resultados fueron interpretados para identificar diferencias significativas en los perfiles metabólicos y su asociación con la respuesta quirúrgica, más allá de la pérdida de peso. Los patrones identificados sugieren que existen factores metabólicos específicos que influyen en los resultados clínicos postoperatorios.
+
+**Métodos Estadísticos y Bioinformáticos**
+
+Se emplearon pruebas paramétricas o no paramétricas para comparar las condiciones pre y post-cirugía entre los metabótipos identificados.
+
+**Gestión y Documentación en GitHub**
+
+Todo el código y los resultados fueron documentados en un repositorio en **GitHub** con el formato de nomenclatura especificado (Gonzalez-Lozano-Carla-PEC1), proporcionando acceso y transparencia en el proceso de análisis.
+
+## **4. Resultados**
+
+**Resultados del Análisis y Exploración de Datos**
+
+1.  **Carga y Preprocesamiento de Datos**
+
+    Los datos se cargaron utilizando read.csv(), eligiendo cada archivo de manera manual. Al archivo llamado DataInfo_S013.csv se le nombró data_info, y al archivo dataValues_S013 se le nombró Data_Values. Para confirmar que se habían cargado correctamente se usó el comando head().
+
+```{r}
+data_info <- read.csv(file.choose(),stringsAsFactors = FALSE)
+data_values <- read.csv(file.choose(),stringsAsFactors = FALSE)
+```
+
+Al conjunto de datos Data_Value se eliminó la primera columna al estar repetida, y las dimensiones de ambos conjuntos de datos, finalmente tenían la misma dimensiones.
+
+Una vez nos aseguramos de la carga correcta del los datos de información clínica y de valores de medición, pudimos continuar con el análisis.
+
+2.  **Creación del Objeto SummarizedExperiment**
+
+Para poder integrar los datos clínicos y las anotaciones en una sola matriz, tuvimos que realizar múltiples cambios.
+
+Para realizar el análisis, comenzamos separando las columnas demográficas de las columnas de medición en el conjunto de datos **data_values**, lo que resultó en dos nuevos conjuntos de datos: **data_pheno**, que contiene las variables demográficas, y **data_measurements**, que incluye las variables de medición.
+
+A continuación, convertimos data_measurements en una matriz mediante el comando as.matrix() para asegurar que los datos estuvieran en el formato adecuado para el análisis. Al intentar crear el objeto SummarizedExperiment, se generó un error indicando un desajuste en la longitud de los nombres de las filas entre data_info y el conjunto de datos.
+
+Para resolver este inconveniente, filtramos data_info de modo que solo contuviera las variables de medición, creando así un nuevo conjunto de datos llamado **filtered_data_info**. Sin embargo, el error persistió, ya que los nombres de las filas en filtered_data_info aún no coincidían con los nombres de las columnas en data_measurements.
+
+Identificamos que el problema residía en la estructura de la matriz: las dimensiones estaban invertidas, lo que requería transponer la matriz de datos. Una vez realizada la transposición, obtuvimos **data_matrix_t**, un conjunto de datos estructurado adecuadamente, en el que las dimensiones coincidían correctamente, permitiendo la creación exitosa del objeto SummarizedExperiment.
+
+Creamos finalmente un objeto de tipo SummarizedExperiment llamado “se”
+
+```{r}
+colnames_demo <- c("SUBJECTS", "SURGERY", "AGE", "GENDER", "Group")
+
+data_pheno <- data_values[, colnames_demo]
+
+data_measurements <- data_values[, !(colnames(data_values) %in% colnames_demo)]
+
+data_matrix <- as.matrix(data_measurements)
+
+filtered_data_info <- data_info[data_info$VarName %in% colnames(data_measurements), ]
+
+data_matrix_t <- t(data_matrix)
+
+se <- SummarizedExperiment(
+  assays = list(counts = data_matrix),
+  colData = data_pheno,
+  rowData = filtered_data_info
+)
+se
+```
+
+El objeto “se” presenta 3 elementos principales, assays(datos de medición) que es la matriz traspuesta, colData(metadatos de las muestras) que es la información contenida en el conjunto de datos data_pheno y por último rowData(metadatos de las variables) que es la información contenida en filtered_data_info.
+
+**3. Exploración Descriptiva**
+
+Uno de los primeros estudios estadísticos que se hicieron con el conjunto de datos es un resumen estadístico básico para calcular media, mediana, desviación estándar, el mínimo y máximo de las variables de medición de cada uno de los 39 pacientes.
+
+```{r}
+measurement_data <- assays(se)$counts
+summary_stats <- data.frame(
+  Mean = colMeans(measurement_data, na.rm = TRUE),
+  Median = apply(measurement_data, 2, median, na.rm = TRUE),
+  SD = apply(measurement_data, 2, sd, na.rm = TRUE),
+  Min = apply(measurement_data, 2, min, na.rm = TRUE),
+  Max = apply(measurement_data, 2, max, na.rm = TRUE)
+)
+
+print(summary_stats)
+```
+
+Este análisis proporciona una visión general de las tendencias y variaciones en las mediciones de cada paciente en el estudio.
+
+Tambien se realizó un enfoque gráfico, donde se observa la distribución de valores de medición de los diferentes metabolitos entre los 39 pacientes.
+
+```{r}
+# Transponer measurement_data para que cada variable de medición sea una columna
+measurement_data_t <- t(measurement_data)
+
+# Crear un boxplot para cada variable de medición
+boxplot(measurement_data_t, 
+        main = "Distribución de Variables de Medición a través de Pacientes",
+        xlab = "Variables de Medición", 
+        ylab = "Valores de Medición", 
+        col = "lightgreen", 
+        outline = FALSE, 
+        las = 2)
+```
+
+**Cálculo de las Medias de las Variables**
+
+Calculamos la media de cada una de las variables que se han medido en los 39 pacientes para poder identificar variables con valores promedio significativamente altos o bajos, los cuales pueden revelar biomarcadores relevantes o variables de interés.
+
+```{r}
+# Calcular la media de cada variable que se ha medidio en los pacientes
+variable_means <- rowMeans(measurement_data, na.rm = TRUE)
+named_variable_means <- data.frame(Variable = rownames(measurement_data), Mean = variable_means)
+print(named_variable_means)
+```
+
+**Variables con Mayores Medias**: Se observaron variables con medias superiores que representan marcadores de estado avanzado o progresivo en el contexto estudiado.
+
+**Variables con Menores Medias**: Variables con menores medias, reflejando biomarcadores en niveles controlados o estables
+
+Tambien se ha calcula la varianza de cada uno de los pacientes. Nos va a permitir entender cuanta variabilidad hay entre las mediciones de los pacientes entre los diferentes tiempos que fueron tomadas.
+
+```{r}
+# Calcular la varianza para cada variable y visualizar las 10 más altas
+variance <- apply(measurement_data, 2, var, na.rm = TRUE)
+variance_summary <- data.frame(Variable = colnames(measurement_data), Variance = variance)
+variance_summary <- variance_summary[order(-variance_summary$Variance), ]
+print(head(variance_summary, 10))  # Las 10 variables con mayor varianza
+
+```
+
+El resultado nos muestra que el paciente que tiene mayor varianza es el paciente 30. Esto nos permite entender que sus mediciones fueron muy volátiles, mientras que aquellos pacientes que presenten una varianza menor, tendrán unas mediciones más estables.
+
+**Conclusiones y Observaciones Adicionales**
+
+-   Los resultados obtenidos sugieren que ciertas variables están fuertemente influenciadas por la intervención, evidenciado por cambios en sus niveles promedio a lo largo del tiempo.
+
+## **5.  Discusión y limitaciones y conclusiones del estudio**
+
+**Discusión**
+
+El presente análisis exploratorio, orientado a la integración y manipulación de datos clínicos en un entorno de bioinformática, ha permitido comprender los pasos fundamentales para organizar, analizar y visualizar conjuntos de datos clínicos en el contexto de intervenciones médicas a lo largo del tiempo. El uso del objeto SummarizedExperiment fue especialmente adecuado, facilitando la consolidación de datos de pacientes y medidas clínicas en una sola estructura. Este enfoque no solo es escalable, sino que también es fácilmente reproducible en estudios futuros.
+
+A lo largo del proceso, el análisis descriptivo y de medias nos brindó una idea clara de las variables con valores promedio altos y bajos, lo cual podría resultar en la identificación de posibles marcadores o tendencias importantes en la evolución de los pacientes. Adicionalmente, la exploración de las variaciones temporales en puntos específicos (como T0, T2 y T4) ofrece un vistazo preliminar a la respuesta de los pacientes a la intervención, en este caso, la cirugía bariátrica.
+
+**Limitaciones del Estudio**
+
+1.  **Limitación en la Profundidad del Análisis Biológico**: Este estudio se centró principalmente en aspectos computacionales y estadísticos de los datos. No obstante, el contexto biológico y clínico, esencial para interpretar los resultados de manera significativa, no fue profundizado. La ausencia de hipótesis clínicas específicas y la falta de análisis especializados limitan la aplicabilidad de los resultados en un contexto biológico o médico.
+
+2.  **Tamaño de Muestra y Representatividad**: En estudios de intervención, el tamaño y la representatividad de la muestra son aspectos críticos para generalizar los hallazgos. Este análisis, realizado sobre un conjunto de datos limitado, podría beneficiarse de una muestra más grande y diversa para asegurar la validez externa de los resultados.
+
+3.  **Potencial de Confusión y Datos Perdidos**: Algunos valores faltantes podrían haber introducido sesgos en el cálculo de las medias y en el análisis de la evolución temporal. La imputación o métodos más robustos para el manejo de datos perdidos podrían mejorar la precisión del análisis.
+
+4.  **Limitaciones en la Temporalidad del Análisis**: La evaluación se basó en puntos temporales predefinidos, pero un análisis longitudinal más detallado (por ejemplo, utilizando modelos de efectos mixtos) podría capturar cambios y patrones más sutiles en la respuesta de los pacientes.
+
+    **Conclusiones**
+
+Este estudio ha permitido profundizar en el uso de herramientas y metodologías de bioinformática para la manipulación y análisis de datos clínicos. A través de la creación de objetos SummarizedExperiment y la identificación de variables clave, hemos desarrollado un flujo de trabajo sólido que puede ser utilizado como base para estudios clínicos con datos similares.
+
+La integración de diferentes etapas, desde la carga de datos hasta el análisis de medias y la identificación de patrones temporales, es un paso importante hacia la implementación de métodos de análisis robustos en bioinformática. No obstante, es evidente que el contexto clínico y el diseño del estudio original son fundamentales para dar un sentido biológico real a los resultados obtenidos. Por lo tanto, para estudios futuros, se recomienda incorporar un enfoque clínico más integral y realizar análisis longitudinales avanzados para obtener una visión completa de la evolución de los pacientes en respuesta a las intervenciones.
+
+Este ejercicio sienta las bases de un flujo de trabajo estándar y reproducible, adaptable a diferentes estudios de intervención, y ofrece una práctica valiosa en el contexto bioinformático para el análisis de datos complejos en el ámbito clínico.
